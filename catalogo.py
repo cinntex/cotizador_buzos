@@ -146,3 +146,4 @@ if st.session_state.modelo_seleccionado:
     else:
         st.warning("Por favor ingresa al menos una prenda para cotizar.")
 
+
