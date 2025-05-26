@@ -145,4 +145,3 @@ if st.session_state.modelo_seleccionado:
         st.markdown(f"[💬 Enviar este pedido por WhatsApp]({url})", unsafe_allow_html=True)
     else:
         st.warning("Por favor ingresa al menos una prenda para cotizar.")
-
