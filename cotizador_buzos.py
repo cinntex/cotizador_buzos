@@ -33,12 +33,21 @@ def obtener_ruta_modelo_seleccionado(modelo_nombre):
 
 def guardar_historial_excel(datos):
     df_nuevo = pd.DataFrame([datos])
-    if not os.path.exists(RUTA_HISTORIAL):
-        df_nuevo.to_excel(RUTA_HISTORIAL, index=False)
-    else:
-        df_existente = pd.read_excel(RUTA_HISTORIAL)
-        df_actualizado = pd.concat([df_existente, df_nuevo], ignore_index=True)
-        df_actualizado.to_excel(RUTA_HISTORIAL, index=False)
+    try:
+        if os.path.exists(RUTA_HISTORIAL):
+            df_existente = pd.read_excel(RUTA_HISTORIAL)
+            df_actualizado = pd.concat([df_existente, df_nuevo], ignore_index=True)
+        else:
+            df_actualizado = df_nuevo
+    except Exception as e:
+        st.warning("⚠️ El archivo de historial estaba dañado y se ha reiniciado automáticamente.")
+        try:
+            os.remove(RUTA_HISTORIAL)
+        except:
+            pass
+        df_actualizado = df_nuevo
+
+    df_actualizado.to_excel(RUTA_HISTORIAL, index=False)
         
 def guardar_pdf_local(pdf_bytes, nombre_base="cotizacion"):
     ahora = datetime.now()
