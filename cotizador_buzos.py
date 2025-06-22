@@ -100,10 +100,10 @@ with col1:
 
 with col2:
     st.markdown("""
-        <div style='padding-top:10px'>
-            <h2 style='margin-bottom:5px;'>SportWear Pro</h2>
-            <p style='color:gray; font-size:16px;'>
-                Confeccionamos prendas personalizadas de alta calidad para <b>empresas</b>, <b>colegios</b> y <b>equipos deportivos</b>.
+        <div style="padding-top: 10px;">
+            <h2 style="margin-bottom: 0;">SportWear Pro</h2>
+            <p style="margin-top: 0; font-size: 16px; color: #ccc;">
+                Confeccionamos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
             </p>
         </div>
     """, unsafe_allow_html=True)
