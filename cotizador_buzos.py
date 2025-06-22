@@ -178,6 +178,7 @@ cantidades = {
     "XL": cols_tallas[4].number_input("XL", min_value=0, step=1),
 }
 cantidad_total = sum(cantidades.values())
+st.markdown(f"🧮 **Total de prendas:** {cantidad_total}")
 bordado = st.multiselect("3. \xbfDeseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantal\xf3n", "No deseo"])
 archivo_logo = st.file_uploader("Sube tu logo o dise\xf1o", type=["jpg", "png", "pdf"])
 
