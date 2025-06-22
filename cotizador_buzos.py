@@ -248,29 +248,41 @@ if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
             mime="application/pdf"
         )
 
-    with col2:
-        url_whatsapp = f"https://wa.me/920076432?text={mensaje_url}"
-        st.markdown(
-            f"""
-            <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
-                <div style="
-                    display: flex;
-                    align-items: center;
-                    background-color: #25D366;
-                    color: white;
-                    padding: 10px 15px;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    font-size: 16px;
-                    width: fit-content;
-                ">
-                    <img src="images/logo_whatsapp.png" alt="WhatsApp" style="height: 24px; margin-right: 10px;">
-                    Enviar por WhatsApp
-                </div>
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
-else:
-    st.warning("⚠️ Por favor completa todos los campos obligatorios antes de generar la cotización.")
+    # === WHATSAPP ===
+
+mensaje = f"""
+¡Hola! Deseo una cotización:
+
+🧥 Prenda: {datos.get("Prenda", "No especificado")}
+📦 Cantidades: {cantidad_total}
+🧍 Modelo: {datos.get("Modelo", "No especificado")}
+🎨 Bordado/Estampado: {datos.get("Bordado/Estampado", "No especificado")}
+📅 Fecha deseada: {datos.get("Fecha deseada", "No especificado")}
+{f'📝 Nota: {datos.get("Comentario diseño", "")}' if datos.get("Tiene diseño", "") == "No, quiero que me ayuden" else ''}
+"""
+
+mensaje_url = mensaje.replace("\n", "%0A").replace(" ", "%20")
+numero = "920076432"
+url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
+
+# Mostrar botón visual con ícono de WhatsApp
+col1, col2 = st.columns([1, 9])
+with col1:
+    st.image("logo_whatsapp.png", width=45)
+with col2:
+    st.markdown(f"""
+        <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
+            <button style="
+                background-color: #25D366;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+            ">
+                Enviar pedido por WhatsApp
+            </button>
+        </a>
+    """, unsafe_allow_html=True)
 
