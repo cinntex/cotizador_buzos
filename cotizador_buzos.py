@@ -181,7 +181,7 @@ fecha_entrega = st.date_input("5. Fecha de entrega", min_value=date.today())
 
 # === DATOS PARA PDF ===
 datos = {
-    "Prenda": tipo_prenda,
+    "Tipo de tela": tipo_tela,
     "Cantidad por tallas": str(cantidades),
     "Modelo": st.session_state.modelo_seleccionado,
     "Bordado/Estampado": ", ".join(bordado),
