@@ -261,7 +261,7 @@ if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
 mensaje = f"""
 ¡Hola! Deseo una cotización:
 
-🧥 Tela: {tela.get("tipo de tela", "No especificado")}
+🧥 Tipo de tela: {tipo_tela}
 📦 Cantidades: {cantidad_total}
 🧍 Modelo: {datos.get("Modelo", "No especificado")}
 🎨 Bordado/Estampado: {datos.get("Bordado/Estampado", "No especificado")}
@@ -280,7 +280,17 @@ mensaje = f"""
 📅 Fecha deseada: {fecha_entrega}
 {f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
 """
-mensaje_url = mensaje.replace("\n", "%0A").replace(" ", "%20")
+mensaje = f"""
+¡Hola! Deseo una cotización:
+
+🧥 Tipo de tela: {tipo_tela}
+📦 Cantidades: {cantidad_total}
+📌 Modelo: {st.session_state.modelo_seleccionado}
+🎯 Bordado/Estampado: {', '.join(bordado)}
+📅 Fecha deseada: {fecha_entrega}
+{f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
+"""
+
 url_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensaje_url}"
 
 st.markdown(f"""
