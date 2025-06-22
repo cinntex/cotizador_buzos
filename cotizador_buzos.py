@@ -92,7 +92,7 @@ def generar_pdf(datos, ruta_logo=None, ruta_disenio=None, ruta_modelo=None):
     return io.BytesIO(contenido)
     
 # === INTERFAZ STREAMLIT ===
-st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="centered")
+st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 st.title("\U0001F9E5 Cotizaci\xf3n de Buzos Deportivos Personalizados")
 
 st.markdown("""
