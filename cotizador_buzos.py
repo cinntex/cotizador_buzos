@@ -291,8 +291,6 @@ mensaje = f"""
 {f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
 """
 
-url_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensaje_url}"
-
 st.markdown(f"""
     <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
         <button style="
