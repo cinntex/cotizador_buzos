@@ -267,7 +267,7 @@ url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
 # Mostrar botón visual con ícono de WhatsApp
 col1, col2 = st.columns([1, 9])
 with col1:
-    st.image("logo_whatsapp.png", width=45)
+    st.image("images/logo_whatsapp.png", width=45)
 with col2:
     st.markdown(f"""
         <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
