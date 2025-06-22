@@ -28,7 +28,7 @@ def guardar_archivo_local(archivo, tipo="logo"):
 def obtener_ruta_modelo_seleccionado(modelo_nombre):
     if modelo_nombre.startswith("Producto"):
         numero = modelo_nombre.split(" ")[1]
-        ruta = os.path.join("images", f"PRODUCTO {numero}.jpg")  # ✅ ruta relativa correcta
+        ruta = os.path.join("images", f"PRODUCTO {numero}.jpg")  # Ruta relativa
         return ruta if os.path.exists(ruta) else None
     return None
 
@@ -123,35 +123,27 @@ Por favor, completa este formulario para brindarte una **cotización exacta**:
 """)  
 
 # === CATÁLOGO VISUAL ===
-RUTA_IMAGENES = "C:/Users/hp/Desktop/Curso de PYTHON/cotizador_buzos/images/"
 N_MODELOS = 39
 MODELOS_POR_PAGINA = 9
 
-if "modelo_seleccionado" not in st.session_state:
-    st.session_state.modelo_seleccionado = "Producto 1"
+st.subheader("📸 Catálogo de modelos de buzos deportivos")
 
-mostrar_catalogo = st.checkbox("📂 Ver catálogo visual de modelos", value=False)
+pagina = st.number_input("Página", min_value=1, max_value=(N_MODELOS - 1)//MODELOS_POR_PAGINA + 1, step=1)
+inicio = (pagina - 1) * MODELOS_POR_PAGINA
+fin = min(inicio + MODELOS_POR_PAGINA, N_MODELOS)
 
-if mostrar_catalogo:
-    st.subheader("📸 Catálogo de modelos de buzos deportivos")
-    total_paginas = (N_MODELOS - 1) // MODELOS_POR_PAGINA + 1
-    pagina = st.number_input("Página", min_value=1, max_value=total_paginas, value=1, step=1)
+cols = st.columns(3)
 
-    inicio = (pagina - 1) * MODELOS_POR_PAGINA + 1
-    fin = min(inicio + MODELOS_POR_PAGINA, N_MODELOS + 1)
-
-    cols = st.columns(3)
-    for idx, i in enumerate(range(inicio, fin)):
-        ruta_imagen = os.path.join(RUTA_IMAGENES, f"PRODUCTO {i}.jpg")
-        try:
-            img = Image.open(ruta_imagen)
-            with cols[idx % 3]:
-                st.image(img, caption=f"Producto {i}", use_container_width=True)
-                if st.button(f"Seleccionar Producto {i}", key=f"boton_{i}"):
-                    st.session_state.modelo_seleccionado = f"Producto {i}"
-                    st.success(f"✅ Modelo seleccionado: Producto {i}")
-        except FileNotFoundError:
-            st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg")
+for idx, i in enumerate(range(inicio + 1, fin + 1)):
+    ruta = os.path.join("images", f"PRODUCTO {i}.jpg")
+    if os.path.exists(ruta):
+        with cols[idx % 3]:
+            if st.button(f"Seleccionar Producto {i}", key=f"btn_{i}"):
+                st.session_state.modelo_seleccionado = f"Producto {i}"
+            st.image(ruta, caption=f"Producto {i}", use_container_width=True)
+    else:
+        with cols[idx % 3]:
+            st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg"))
 
 st.subheader("📌 ¿Qué modelo te interesa?")
 
@@ -159,7 +151,8 @@ st.subheader("📌 ¿Qué modelo te interesa?")
 lista_modelos = ["Ninguno"] + [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
 # Proteger el índice actual
-modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
+if "modelo_seleccionado" not in st.session_state:
+    st.session_state.modelo_seleccionado = "Ninguno"
 if modelo_actual in lista_modelos:
     index_seleccionado = lista_modelos.index(modelo_actual)
 else:
