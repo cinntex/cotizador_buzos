@@ -104,7 +104,7 @@ def generar_pdf(datos, ruta_logo=None, ruta_disenio=None, ruta_modelo=None):
 st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 st.markdown("""
 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-st.image("images/logo_cinntex.png", width=120)
+st.image("images/logo_cinntex.png", width=50)
     <div>
         <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
         <p style="margin-top: 0; font-size: 16px; color: #ccc;">
