@@ -110,20 +110,24 @@ if "modelo_seleccionado" not in st.session_state:
 
 modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
 
-st.subheader("\U0001F4F8 Cat\xe1logo de modelos")
-total_paginas = (N_MODELOS - 1) // MODELOS_POR_PAGINA + 1
-pagina = st.number_input("P\xe1gina", min_value=1, max_value=total_paginas, step=1)
-inicio = (pagina - 1) * MODELOS_POR_PAGINA
-fin = min(inicio + MODELOS_POR_PAGINA, N_MODELOS)
-cols = st.columns(3)
+with st.expander("📂 Ver catálogo visual de modelos"):
+    st.subheader("📸 Catálogo de modelos de buzos deportivos")
 
-for idx, i in enumerate(range(inicio + 1, fin + 1)):
-    ruta = os.path.join("images", f"PRODUCTO {i}.jpg")
-    with cols[idx % 3]:
-        if os.path.exists(ruta):
-            st.image(ruta, caption=f"Producto {i}", use_container_width=True)
-            if st.button(f"Seleccionar Producto {i}", key=f"btn_{i}"):
-                st.session_state.modelo_seleccionado = f"Producto {i}"
+    total_paginas = (N_MODELOS - 1) // MODELOS_POR_PAGINA + 1
+    pagina = st.number_input("Página", min_value=1, max_value=total_paginas, step=1)
+    inicio = (pagina - 1) * MODELOS_POR_PAGINA
+    fin = min(inicio + MODELOS_POR_PAGINA, N_MODELOS)
+    cols = st.columns(3)
+
+    for idx, i in enumerate(range(inicio + 1, fin + 1)):
+        ruta = os.path.join("images", f"PRODUCTO {i}.jpg")
+        with cols[idx % 3]:
+            if os.path.exists(ruta):
+                st.image(ruta, caption=f"Producto {i}", use_container_width=True)
+                if st.button(f"Seleccionar Producto {i}", key=f"btn_{i}"):
+                    st.session_state.modelo_seleccionado = f"Producto {i}"
+            else:
+                st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg")
 
 st.subheader("\U0001F4CC \xbfQu\xe9 modelo te interesa?")
 modelo_selectbox = st.selectbox(
