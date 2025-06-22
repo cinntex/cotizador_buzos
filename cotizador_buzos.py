@@ -36,6 +36,36 @@ def obtener_ruta_modelo_seleccionado(modelo_nombre):
 # CONFIGURACIÓN
 st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="centered")
 
+st.markdown("---")
+st.subheader("🧾 Vista previa del pedido")
+
+# Mostrar imagen del modelo
+if ruta_modelo_buzo and os.path.exists(ruta_modelo_buzo):
+    st.image(ruta_modelo_buzo, caption="Modelo seleccionado", width=250)
+elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
+    st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
+else:
+    st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
+
+# Mostrar información del pedido
+st.write("### Detalles del pedido:")
+for etiqueta, valor in datos.items():
+    if isinstance(valor, dict):  # Ej. tallas
+        st.write(f"**{etiqueta}:**")
+        st.write(valor)
+    else:
+        st.write(f"**{etiqueta}:** {valor}")
+
+# Mostrar imágenes adicionales
+if ruta_logo_guardado and os.path.exists(ruta_logo_guardado):
+    st.image(ruta_logo_guardado, caption="Logo subido", width=150)
+
+if ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
+    st.image(ruta_disenio_guardado, caption="Diseño / Imagen de referencia", width=150)
+
+# Confirmación antes de continuar
+st.info("✅ Verifica toda la información antes de continuar.")
+
 # === PDF CLASS ===
 class PDFCotizacion(FPDF):
     def header(self):
