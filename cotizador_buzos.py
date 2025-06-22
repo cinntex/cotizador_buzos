@@ -221,7 +221,7 @@ st.info("✅ Verifica todos los datos antes de continuar.")
 # === VALIDACIÓN Y GENERACIÓN DE PDF ===
 st.markdown("---")
 if st.button("📄 Generar y descargar PDF"):
-    if not tipo_prenda:
+    if not tipo_tel:
         st.error("Por favor ingresa la prenda que deseas confeccionar.")
     elif cantidad_total == 0:
         st.error("Debes ingresar al menos una cantidad en alguna talla.")
