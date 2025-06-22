@@ -129,7 +129,8 @@ with st.expander("📂 Ver catálogo visual de modelos"):
             else:
                 st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg")
 
-st.subheader("\U0001F4CC \xbfQu\xe9 modelo te interesa?")
+# Selector visual de modelo
+st.subheader("📌 ¿Qué modelo te interesa?")
 modelo_selectbox = st.selectbox(
     "Selecciona el modelo",
     options=["Ninguno"] + lista_modelos,
@@ -137,9 +138,12 @@ modelo_selectbox = st.selectbox(
     key="modelo_seleccionado"
 )
 
+# Subida de imagen personalizada (si no encuentra modelo en el catálogo)
 st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
 archivo_referencia = st.file_uploader("📤 Sube tu modelo o diseño personalizado", type=["jpg", "png", "pdf"])
 
+# === FORMULARIO PRINCIPAL ===
+tipo_prenda = st.text_input("1. ¿Qué deseas confeccionar?")
 
 st.subheader("2. Cantidad por tallas")
 cols_tallas = st.columns(5)
