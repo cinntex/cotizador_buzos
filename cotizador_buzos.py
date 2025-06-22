@@ -99,7 +99,6 @@ st.markdown("""
 Trabajamos prendas personalizadas con acabados profesionales.
 Por favor, completa este formulario para brindarte una **cotizaci\xf3n exacta**:
 """)
-
 # === CAT\xc1LOGO VISUAL ===
 N_MODELOS = 39
 MODELOS_POR_PAGINA = 9
