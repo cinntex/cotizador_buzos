@@ -261,7 +261,7 @@ if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
 mensaje = f"""
 ¡Hola! Deseo una cotización:
 
-🧥 Prenda: {datos.get("Prenda", "No especificado")}
+🧥 Tela: {tela.get("tipo de tela", "No especificado")}
 📦 Cantidades: {cantidad_total}
 🧍 Modelo: {datos.get("Modelo", "No especificado")}
 🎨 Bordado/Estampado: {datos.get("Bordado/Estampado", "No especificado")}
@@ -273,7 +273,7 @@ numero_whatsapp = "920076432"
 mensaje = f"""
 ¡Hola! Deseo una cotización:
 
-🧥 Prenda: {tipo_prenda}
+🧵 Tipo de tela: {tipo_tela}
 📦 Cantidades: {cantidad_total}
 🧍 Modelo: {st.session_state.modelo_seleccionado}
 🎨 Bordado/Estampado: {', '.join(bordado)}
@@ -302,6 +302,7 @@ st.markdown(f"""
         </button>
     </a>
 """, unsafe_allow_html=True)
+
 
 
     
