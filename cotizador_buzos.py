@@ -96,7 +96,7 @@ st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 col1, col2 = st.columns([1, 4])
 
 with col1:
-    st.image("images/logo_cinntex.png", width=180)
+    st.image("images/logo_cinntex.png", width=200)
 
 with col2:
     st.markdown("""
