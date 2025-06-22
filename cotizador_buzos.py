@@ -263,53 +263,26 @@ mensaje = f"""
 
 🧥 Tipo de tela: {tipo_tela}
 📦 Cantidades: {cantidad_total}
-🧍 Modelo: {datos.get("Modelo", "No especificado")}
-🎨 Bordado/Estampado: {datos.get("Bordado/Estampado", "No especificado")}
-📅 Fecha deseada: {datos.get("Fecha deseada", "No especificado")}
-{f'📝 Nota: {datos.get("Comentario diseño", "")}' if datos.get("Tiene diseño", "") == "No, quiero que me ayuden" else ''}
-"""
-
-numero_whatsapp = "920076432"
-mensaje = f"""
-¡Hola! Deseo una cotización:
-
-🧵 Tipo de tela: {tipo_tela}
-📦 Cantidades: {cantidad_total}
-🧍 Modelo: {st.session_state.modelo_seleccionado}
-🎨 Bordado/Estampado: {', '.join(bordado)}
-📅 Fecha deseada: {fecha_entrega}
-{f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
-"""
-mensaje = f"""
-¡Hola! Deseo una cotización:
-
-🧥 Tipo de tela: {tipo_tela}
-📦 Cantidades: {cantidad_total}
 📌 Modelo: {st.session_state.modelo_seleccionado}
 🎯 Bordado/Estampado: {', '.join(bordado)}
 📅 Fecha deseada: {fecha_entrega}
 {f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
 """
+mensaje_url = mensaje.replace("\n", "%0A").replace(" ", "%20")
+numero = "920076432"
+url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
 
-st.markdown(f"""
+st.markdown(
+    f"""
     <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
-        <button style="
-            background-color: #25D366;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        ">
-            <span style="font-size: 20px;">📱</span>
-            Enviar pedido por WhatsApp
+        <button style="background-color: #25D366; color: white; padding: 10px 20px;
+                       border: none; border-radius: 5px; font-size: 16px;">
+            📲 Enviar por WhatsApp
         </button>
     </a>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 
 
