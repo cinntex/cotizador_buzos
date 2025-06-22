@@ -143,7 +143,18 @@ st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
 archivo_referencia = st.file_uploader("📤 Sube tu modelo o diseño personalizado", type=["jpg", "png", "pdf"])
 
 # === FORMULARIO PRINCIPAL ===
-tipo_prenda = st.text_input("1. ¿Qué deseas confeccionar?")
+st.subheader("1. Selecciona el tipo de tela o material")
+
+tipo_tela = st.selectbox("Tipo de tela disponible:", [
+    "Microwalon",
+    "Microprince",
+    "Microsatin",
+    "Nova",
+    "Gamberra",
+    "Sport Licra",
+    "Polinan",
+    "Interfil"
+])
 
 st.subheader("2. Cantidad por tallas")
 cols_tallas = st.columns(5)
