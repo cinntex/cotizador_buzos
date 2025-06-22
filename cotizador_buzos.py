@@ -231,39 +231,46 @@ if ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
 
 st.info("✅ Verifica todos los datos antes de continuar.")
 
-# === VALIDACIÓN Y GENERACIÓN DE PDF ===
+# === VALIDACIÓN Y GENERACIÓN DE PDF + BOTONES MEJORADOS ===
 st.markdown("---")
-if st.button("📄 Generar y descargar PDF"):
-    if not tipo_tela:
-        st.error("Por favor ingresa la prenda que deseas confeccionar.")
-    elif cantidad_total == 0:
-        st.error("Debes ingresar al menos una cantidad en alguna talla.")
-    elif not ruta_modelo_buzo:
-        st.error("Debes seleccionar un modelo o subir una imagen de referencia.")
-    elif not fecha_entrega:
-        st.error("Selecciona una fecha de entrega.")
-    else:
-        pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
-        ruta_pdf_local = guardar_pdf_local(pdf_buffer)
-        guardar_historial_excel(datos)
-        st.download_button("📥 Descargar PDF", data=pdf_buffer, file_name="cotizacion_buzos.pdf", mime="application/pdf")
+if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
+    pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
+    ruta_pdf_local = guardar_pdf_local(pdf_buffer)
+    guardar_historial_excel(datos)
 
-# === WHATSAPP ===
-if st.button("📲 Enviar por WhatsApp"):
-    mensaje = f"""
-¡Hola! Deseo una cotizaci\xf3n:
+    col1, col2 = st.columns(2)
 
-🧥 Prenda: {tipo_prenda}
-📦 Cantidades: {cantidad_total}
-🧍 Modelo: {st.session_state.modelo_seleccionado}
-🎨 Bordado/Estampado: {', '.join(bordado)}
-📅 Fecha deseada: {fecha_entrega}
-{f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
-"""
-    mensaje_url = mensaje.replace("\n", "%0A").replace(" ", "%20")
-    numero = "920076432"
-    url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
-    st.markdown(f"[👉 Enviar ahora por WhatsApp]({url_whatsapp})", unsafe_allow_html=True)
-    
-st.success("✅ App lista para cotizar profesionalmente.")
+    with col1:
+        st.download_button(
+            label="📥 Descargar PDF",
+            data=pdf_buffer,
+            file_name="cotizacion_buzos.pdf",
+            mime="application/pdf"
+        )
+
+    with col2:
+        url_whatsapp = f"https://wa.me/920076432?text={mensaje_url}"
+        st.markdown(
+            f"""
+            <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    background-color: #25D366;
+                    color: white;
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    font-weight: bold;
+                    font-size: 16px;
+                    width: fit-content;
+                ">
+                    <img src="images/logo_whatsapp.png" alt="WhatsApp" style="height: 24px; margin-right: 10px;">
+                    Enviar por WhatsApp
+                </div>
+            </a>
+            """,
+            unsafe_allow_html=True
+        )
+else:
+    st.warning("⚠️ Por favor completa todos los campos obligatorios antes de generar la cotización.")
 
