@@ -99,13 +99,14 @@ st.markdown("""
 Trabajamos prendas personalizadas con acabados profesionales.
 Por favor, completa este formulario para brindarte una **cotizaci\xf3n exacta**:
 """)
-# === CAT\xc1LOGO VISUAL ===
+# === CATÁLOGO VISUAL ===
 N_MODELOS = 39
 MODELOS_POR_PAGINA = 9
-lista_modelos = [f"Producto {i}" for i in range(:
-    st.session_state.modelo_seleccionado = "Ning1, N_MODELOS + 1)]
+lista_modelos = [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
-if "modelo_seleccionado" not in st.session_stateuno"
+# Inicializa el modelo seleccionado si no existe
+if "modelo_seleccionado" not in st.session_state:
+    st.session_state.modelo_seleccionado = "Ninguno"
 
 modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
 
