@@ -160,20 +160,18 @@ st.subheader("📌 ¿Qué modelo te interesa?")
 lista_modelos = ["Ninguno"] + [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
 # Determinar el índice actual basado en session_state
-modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
-if modelo_actual not in lista_modelos:
-    modelo_actual = "Ninguno"
+if "modelo_seleccionado" not in st.session_state:
+    st.session_state.modelo_seleccionado = "Ninguno"
 
-# Mostrar el selectbox con la selección actualizada
+modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
+
+# Mostrar el selectbox y vincularlo al session_state
 modelo_selectbox = st.selectbox(
-    "Selecciona el modelo (o elige uno desde el catálogo visual)",
-    options=lista_modelos,
-    index=lista_modelos.index(modelo_actual),
+    "📌 ¿Qué modelo te interesa?",
+    options=["Ninguno"] + [f"Producto {i}" for i in range(1, N_MODELOS + 1)],
+    index=(["Ninguno"] + [f"Producto {i}" for i in range(1, N_MODELOS + 1)]).index(modelo_actual),
     key="modelo_seleccionado"
 )
-
-# Guardar modelo en el estado global
-st.session_state.modelo_seleccionado = modelo_selectbox
 
 st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
 archivo_referencia = st.file_uploader("📤 Sube tu modelo o diseño personalizado", type=["jpg", "png", "pdf"])
