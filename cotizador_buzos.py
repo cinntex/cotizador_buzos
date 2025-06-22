@@ -249,7 +249,6 @@ if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
         )
 
     # === WHATSAPP ===
-
 mensaje = f"""
 ¡Hola! Deseo una cotización:
 
@@ -285,4 +284,9 @@ with col2:
             </button>
         </a>
     """, unsafe_allow_html=True)
+    
+    else:
+    st.warning("⚠️ Por favor completa todos los campos obligatorios antes de generar la cotización.")
+
+    
 
