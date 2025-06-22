@@ -143,7 +143,7 @@ for idx, i in enumerate(range(inicio + 1, fin + 1)):
             st.image(ruta, caption=f"Producto {i}", use_container_width=True)
     else:
         with cols[idx % 3]:
-            st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg"))
+            st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg")
 
 st.subheader("📌 ¿Qué modelo te interesa?")
 
