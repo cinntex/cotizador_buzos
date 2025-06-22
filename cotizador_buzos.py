@@ -269,28 +269,39 @@ mensaje = f"""
 {f'📝 Nota: {datos.get("Comentario diseño", "")}' if datos.get("Tiene diseño", "") == "No, quiero que me ayuden" else ''}
 """
 
+numero_whatsapp = "920076432"
+mensaje = f"""
+¡Hola! Deseo una cotización:
+
+🧥 Prenda: {tipo_prenda}
+📦 Cantidades: {cantidad_total}
+🧍 Modelo: {st.session_state.modelo_seleccionado}
+🎨 Bordado/Estampado: {', '.join(bordado)}
+📅 Fecha deseada: {fecha_entrega}
+{f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
+"""
 mensaje_url = mensaje.replace("\n", "%0A").replace(" ", "%20")
-numero = "920076432"
-url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
+url_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensaje_url}"
 
-# Mostrar botón visual con ícono de WhatsApp
-col1, col2 = st.columns([0.1, 0.9])
-
-with col1:
-    logo_whatsapp = Image.open("images/logo_whatsapp.png")
-    st.image(logo_whatsapp, width=30)
-
-with col2:
-    st.markdown(
-        f"""
-        <a href="{url_whatsapp}" target="_blank">
-            <button style='background-color:#25D366;color:white;padding:0.6em 1.2em;border:none;border-radius:5px;font-weight:bold;cursor:pointer;'>
-                Enviar pedido por WhatsApp
-            </button>
-        </a>
-        """,
-        unsafe_allow_html=True
-    )
+st.markdown(f"""
+    <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
+        <button style="
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        ">
+            <span style="font-size: 20px;">📱</span>
+            Enviar pedido por WhatsApp
+        </button>
+    </a>
+""", unsafe_allow_html=True)
 
 
     
