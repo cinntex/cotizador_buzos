@@ -274,25 +274,22 @@ numero = "920076432"
 url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
 
 # Mostrar botón visual con ícono de WhatsApp
-col1, col2 = st.columns([1, 9])
+col1, col2 = st.columns([0.1, 0.9])
+
 with col1:
-    st.image("images/logo_whatsapp.png", width=45)
+    st.image("logo_whatsapp.png", width=30)
+
 with col2:
-    st.markdown(f"""
-        <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
-            <button style="
-                background-color: #25D366;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                font-size: 16px;
-                border-radius: 5px;
-                cursor: pointer;
-            ">
+    st.markdown(
+        f"""
+        <a href="{url_whatsapp}" target="_blank">
+            <button style='background-color:#25D366;color:white;padding:0.6em 1.2em;border:none;border-radius:5px;font-weight:bold;cursor:pointer;'>
                 Enviar pedido por WhatsApp
             </button>
         </a>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
 
     
