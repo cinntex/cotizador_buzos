@@ -137,8 +137,9 @@ modelo_selectbox = st.selectbox(
     key="modelo_seleccionado"
 )
 
-archivo_referencia = st.file_uploader("\U0001F4C4 Sube imagen de referencia", type=["jpg", "png", "pdf"])
-tipo_prenda = st.text_input("1. \xbfQu\xe9 deseas confeccionar?")
+st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
+archivo_referencia = st.file_uploader("📤 Sube tu modelo o diseño personalizado", type=["jpg", "png", "pdf"])
+
 
 st.subheader("2. Cantidad por tallas")
 cols_tallas = st.columns(5)
