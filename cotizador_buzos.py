@@ -157,22 +157,19 @@ for idx, i in enumerate(range(inicio + 1, fin + 1)):
 
 st.subheader("📌 ¿Qué modelo te interesa?")
 
-# Lista con opción "Ninguno"
 lista_modelos = ["Ninguno"] + [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
-# Proteger el índice actual
-if "modelo_seleccionado" not in st.session_state:
-    modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
-if modelo_actual in lista_modelos:
-    index_seleccionado = lista_modelos.index(modelo_actual)
-else:
-    index_seleccionado = 0  # Por defecto "Ninguno"
+# Determinar el índice actual basado en session_state
+modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
+if modelo_actual not in lista_modelos:
+    modelo_actual = "Ninguno"
 
-# Mostrar el selectbox
+# Mostrar el selectbox con la selección actualizada
 modelo_selectbox = st.selectbox(
     "Selecciona el modelo (o elige uno desde el catálogo visual)",
-    lista_modelos,
-    index=index_seleccionado
+    options=lista_modelos,
+    index=lista_modelos.index(modelo_actual),
+    key="modelo_seleccionado"
 )
 
 # Guardar modelo en el estado global
