@@ -125,24 +125,34 @@ Por favor, completa este formulario para brindarte una **cotización exacta**:
 # === CATÁLOGO VISUAL ===
 N_MODELOS = 39
 MODELOS_POR_PAGINA = 9
+lista_modelos = [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
+# Inicializa el modelo seleccionado si no existe
+if "modelo_seleccionado" not in st.session_state:
+    st.session_state.modelo_seleccionado = "Ninguno"
+
+modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
+
+# Catálogo visual
 st.subheader("📸 Catálogo de modelos de buzos deportivos")
 
-pagina = st.number_input("Página", min_value=1, max_value=(N_MODELOS - 1)//MODELOS_POR_PAGINA + 1, step=1)
+# Selector de página
+total_paginas = (N_MODELOS - 1) // MODELOS_POR_PAGINA + 1
+pagina = st.number_input("Página", min_value=1, max_value=total_paginas, step=1)
 inicio = (pagina - 1) * MODELOS_POR_PAGINA
 fin = min(inicio + MODELOS_POR_PAGINA, N_MODELOS)
 
+# Muestra modelos de la página actual
 cols = st.columns(3)
 
 for idx, i in enumerate(range(inicio + 1, fin + 1)):
     ruta = os.path.join("images", f"PRODUCTO {i}.jpg")
-    if os.path.exists(ruta):
-        with cols[idx % 3]:
+    with cols[idx % 3]:
+        if os.path.exists(ruta):
+            st.image(ruta, caption=f"Producto {i}", use_container_width=True)
             if st.button(f"Seleccionar Producto {i}", key=f"btn_{i}"):
                 st.session_state.modelo_seleccionado = f"Producto {i}"
-            st.image(ruta, caption=f"Producto {i}", use_container_width=True)
-    else:
-        with cols[idx % 3]:
+        else:
             st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg")
 
 st.subheader("📌 ¿Qué modelo te interesa?")
@@ -152,7 +162,7 @@ lista_modelos = ["Ninguno"] + [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
 # Proteger el índice actual
 if "modelo_seleccionado" not in st.session_state:
-    st.session_state.modelo_seleccionado = "Ninguno"
+    modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
 if modelo_actual in lista_modelos:
     index_seleccionado = lista_modelos.index(modelo_actual)
 else:
