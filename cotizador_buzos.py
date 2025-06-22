@@ -93,6 +93,21 @@ def generar_pdf(datos, ruta_logo=None, ruta_disenio=None, ruta_modelo=None):
     
 # === INTERFAZ STREAMLIT ===
 st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
+col1, col2 = st.columns([1, 4])
+
+with col1:
+    st.image("images/logo_cinntex.png", width=90)
+
+with col2:
+    st.markdown("""
+        <div style='padding-top:10px'>
+            <h2 style='margin-bottom:5px;'>SportWear Pro</h2>
+            <p style='color:gray; font-size:16px;'>
+                Confeccionamos prendas personalizadas de alta calidad para <b>empresas</b>, <b>colegios</b> y <b>equipos deportivos</b>.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
 st.title("\U0001F9E5 Cotizaci\xf3n de Buzos Deportivos Personalizados")
 
 st.markdown("""
