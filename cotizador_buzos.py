@@ -28,7 +28,7 @@ def guardar_archivo_local(archivo, tipo="logo"):
 def obtener_ruta_modelo_seleccionado(modelo_nombre):
     if modelo_nombre.startswith("Producto"):
         numero = modelo_nombre.split(" ")[1]
-        ruta = os.path.join("C:/Users/hp/Desktop/Curso de PYTHON/cotizador_buzos/images", f"PRODUCTO {numero}.jpg")
+        ruta = os.path.join("images", f"PRODUCTO {numero}.jpg")  # ✅ ruta relativa correcta
         return ruta if os.path.exists(ruta) else None
     return None
 
