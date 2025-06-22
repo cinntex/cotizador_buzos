@@ -277,7 +277,8 @@ url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
 col1, col2 = st.columns([0.1, 0.9])
 
 with col1:
-    st.image("logo_whatsapp.png", width=30)
+    logo_whatsapp = Image.open("images/logo_whatsapp.png")
+    st.image(logo_whatsapp, width=30)
 
 with col2:
     st.markdown(
