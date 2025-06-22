@@ -285,8 +285,11 @@ with col2:
         </a>
     """, unsafe_allow_html=True)
     
-    else:
-    st.warning("⚠️ Por favor completa todos los campos obligatorios antes de generar la cotización.")
+if diseno_existente == "Sí, lo subiré":
+    archivo_diseno = st.file_uploader("Sube tu diseño o referencia", type=["jpg", "png", "pdf"])
+else:
+    comentario_diseno = st.text_area("Describe lo que deseas que diseñemos:")
+
 
     
 
