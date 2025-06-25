@@ -5,6 +5,7 @@ import io
 import os
 from PIL import Image
 from datetime import datetime
+from PIL import UnidentifiedImageError
 import pandas as pd
 
 # === CONFIGURACIÓN GENERAL ===
@@ -221,13 +222,18 @@ ruta_disenio_guardado = guardar_archivo_local(archivo_diseno or archivo_referenc
 ruta_modelo_buzo = obtener_ruta_modelo_seleccionado(st.session_state.modelo_seleccionado)
 if st.session_state.modelo_seleccionado == "Ninguno":
     ruta_modelo_buzo = guardar_archivo_local(archivo_referencia, tipo="modelo") if archivo_referencia else None
-
-if ruta_modelo_buzo and os.path.exists(ruta_modelo_buzo):
-    st.image(ruta_modelo_buzo, caption="Modelo seleccionado", width=250)
-elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
-    st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
-else:
-    st.warning("No se ha seleccionado ning\xfan modelo ni imagen de referencia.")
+    
+try:
+    if ruta_modelo_buzo and os.path.exists(ruta_modelo_buzo):
+        st.image(ruta_modelo_buzo, caption="Modelo seleccionado", width=250)
+    elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
+        st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
+    elif archivo_referencia is not None:
+        st.image(archivo_referencia, caption="Imagen subida", width=250)
+    else:
+        st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
+except UnidentifiedImageError:
+    st.error("⚠️ No se pudo cargar la imagen. Verifica que el archivo subido sea una imagen válida (JPG, PNG).")
 
 st.write("### Detalles del pedido:")
 for k, v in datos.items():
