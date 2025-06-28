@@ -127,30 +127,28 @@ secciones = ["🏠 Inicio", "🧥 Catálogo de modelos", "🧾 Cotización"]
 seccion = st.sidebar.radio("Navegación", secciones)
 
 if seccion == "🧥 Catálogo de modelos":
-# CATÁLOGO VISUAL
-if "modelo_seleccionado" not in st.session_state:
-    st.session_state.modelo_seleccionado = "Ninguno"
+    # === CATÁLOGO VISUAL ===
+    if "modelo_seleccionado" not in st.session_state:
+        st.session_state.modelo_seleccionado = "Ninguno"
 
-st.markdown("📂 Ver catálogo visual de modelos")
+    st.markdown("📂 Ver catálogo visual de modelos")
 
-def mostrar_catalogo(categoria, ruta_carpeta):
-    st.subheader(f"📸 Catálogo - {categoria}")
-    imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
-    cols = st.columns(3)
-    for idx, img_nombre in enumerate(imagenes):
-        ruta = os.path.join(ruta_carpeta, img_nombre)
-        with cols[idx % 3]:
-            st.image(ruta, caption=img_nombre.split('.')[0], use_container_width=True)
-            if st.button(f"Seleccionar {categoria} - {img_nombre.split('.')[0]}", key=f"{categoria}_{img_nombre}"):
-                st.session_state.modelo_seleccionado = f"{categoria} - {img_nombre.split('.')[0]}"
+    def mostrar_catalogo(categoria, ruta_carpeta):
+        st.subheader(f"📸 Catálogo - {categoria}")
+        imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
+        cols = st.columns(3)
+        for idx, img_nombre in enumerate(imagenes):
+            ruta = os.path.join(ruta_carpeta, img_nombre)
+            with cols[idx % 3]:
+                st.image(ruta, caption=img_nombre.split('.')[0], use_container_width=True)
+                if st.button(f"Seleccionar {categoria} - {img_nombre.split('.')[0]}", key=f"{categoria}_{img_nombre}"):
+                    st.session_state.modelo_seleccionado = f"{categoria} - {img_nombre.split('.')[0]}"
 
-# Mostrar catálogos de ambas categorías
-mostrar_catalogo("Buzos Deportivos", "images/Buzos Deportivos")
-mostrar_catalogo("Buzos Escolares", "images/Buzos Escolares")
+    mostrar_catalogo("Buzos Deportivos", "images/Buzos Deportivos")
+    mostrar_catalogo("Buzos Escolares", "images/Buzos Escolares")
 
-# Subida de imagen personalizada (si no encuentra modelo en el catálogo)
-st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
-archivo_referencia = st.file_uploader("📤 Sube tu modelo o diseño personalizado", type=["jpg", "png", "pdf"])
+    st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
+    archivo_referencia = st.file_uploader("📤 Sube tu modelo o diseño personalizado", type=["jpg", "png", "pdf"])
 
 # === FORMULARIO PRINCIPAL ===
 st.subheader("1. Selecciona el tipo de tela o material")
