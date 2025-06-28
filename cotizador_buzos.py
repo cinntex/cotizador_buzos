@@ -79,20 +79,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
-
-st.markdown("""
-<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-    <img src="https://mi-servidor.com/logo_cinntex.png" style="width: 120px;">
-    <div>
-        <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
-        <p style="margin-top: 0; font-size: 16px; color: #ccc;">
-            Confeccionamos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
-        </p>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
 st.title("🧥 Catálogo y Cotización de Buzos Personalizados")
 
 if "modelo_seleccionado" not in st.session_state:
