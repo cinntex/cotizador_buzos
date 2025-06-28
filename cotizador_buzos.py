@@ -88,10 +88,10 @@ archivo_referencia = None
 archivo_diseno = None
 comentario_diseno = ""
 
-# === SISTEMA DE TABS ===
-tab1, tab2 = st.tabs(["📸 Catálogo", "📝 Formulario"])
+# === MENÚ DE NAVEGACIÓN ===
+seccion = st.sidebar.radio("Navegación", ["📸 Catálogo de modelos", "📝 Formulario de cotización"])
 
-with tab1:
+if seccion == "📸 Catálogo de modelos":
     categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
 
     if categoria:
@@ -107,11 +107,11 @@ with tab1:
                     st.image(ruta, caption=nombre_modelo, use_container_width=True)
                     if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                         st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                        st.success(f"Modelo '{nombre_modelo}' seleccionado. Ve a la pestaña de formulario para continuar.")
+                        st.success(f"Modelo '{nombre_modelo}' seleccionado. Ve al formulario de cotización para continuar.")
 
         mostrar_catalogo(categoria, f"images/{categoria}")
 
-with tab2:
+if seccion == "📝 Formulario de cotización":
     if st.session_state.modelo_seleccionado != "Ninguno":
         st.success(f"Modelo seleccionado: {st.session_state.modelo_seleccionado}")
 
@@ -184,7 +184,7 @@ with tab2:
 
         st.info("✅ Verifica todos los datos antes de continuar.")
     else:
-        st.warning("Selecciona un modelo desde la pestaña de catálogo para continuar con el formulario.")
+        st.warning("Selecciona un modelo desde el catálogo para continuar con el formulario.")
 
 # === CLASE PDF ===
 class PDFCotizacion(FPDF):
