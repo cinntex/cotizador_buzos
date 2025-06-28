@@ -121,44 +121,27 @@ st.markdown("""
 Trabajamos prendas personalizadas con acabados profesionales.
 Por favor, completa este formulario para brindarte una **cotizaci\xf3n exacta**:
 """)
-# === CATÁLOGO VISUAL ===
-N_MODELOS = 39
-MODELOS_POR_PAGINA = 9
-lista_modelos = [f"Producto {i}" for i in range(1, N_MODELOS + 1)]
 
-# Inicializa el modelo seleccionado si no existe
+# CATÁLOGO VISUAL
 if "modelo_seleccionado" not in st.session_state:
     st.session_state.modelo_seleccionado = "Ninguno"
 
-modelo_actual = st.session_state.get("modelo_seleccionado", "Ninguno")
+st.markdown("📂 Ver catálogo visual de modelos")
 
-with st.expander("📂 Ver catálogo visual de modelos"):
-    st.subheader("📸 Catálogo de modelos de buzos deportivos")
-
-    total_paginas = (N_MODELOS - 1) // MODELOS_POR_PAGINA + 1
-    pagina = st.number_input("Página", min_value=1, max_value=total_paginas, step=1)
-    inicio = (pagina - 1) * MODELOS_POR_PAGINA
-    fin = min(inicio + MODELOS_POR_PAGINA, N_MODELOS)
+def mostrar_catalogo(categoria, ruta_carpeta):
+    st.subheader(f"📸 Catálogo - {categoria}")
+    imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
     cols = st.columns(3)
-
-    for idx, i in enumerate(range(inicio + 1, fin + 1)):
-        ruta = os.path.join("images", f"PRODUCTO {i}.jpg")
+    for idx, img_nombre in enumerate(imagenes):
+        ruta = os.path.join(ruta_carpeta, img_nombre)
         with cols[idx % 3]:
-            if os.path.exists(ruta):
-                st.image(ruta, caption=f"Producto {i}", use_container_width=True)
-                if st.button(f"Seleccionar Producto {i}", key=f"btn_{i}"):
-                    st.session_state.modelo_seleccionado = f"Producto {i}"
-            else:
-                st.warning(f"No se encontró la imagen: PRODUCTO {i}.jpg")
+            st.image(ruta, caption=img_nombre.split('.')[0], use_container_width=True)
+            if st.button(f"Seleccionar {categoria} - {img_nombre.split('.')[0]}", key=f"{categoria}_{img_nombre}"):
+                st.session_state.modelo_seleccionado = f"{categoria} - {img_nombre.split('.')[0]}"
 
-# Selector visual de modelo
-st.subheader("📌 ¿Qué modelo te interesa?")
-modelo_selectbox = st.selectbox(
-    "Selecciona el modelo",
-    options=["Ninguno"] + lista_modelos,
-    index=(["Ninguno"] + lista_modelos).index(st.session_state.modelo_seleccionado),
-    key="modelo_seleccionado"
-)
+# Mostrar catálogos de ambas categorías
+mostrar_catalogo("Buzos Deportivos", "images/Buzos Deportivos")
+mostrar_catalogo("Buzos Escolares", "images/Buzos Escolares")
 
 # Subida de imagen personalizada (si no encuentra modelo en el catálogo)
 st.markdown("¿No encuentras un modelo que se ajuste a tu necesidad?")
