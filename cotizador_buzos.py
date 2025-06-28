@@ -4,6 +4,7 @@ from datetime import date
 import io
 import os
 from PIL import Image, UnidentifiedImageError
+from PIL import UnidentifiedImageError
 from datetime import datetime
 import pandas as pd
 
@@ -64,8 +65,14 @@ def obtener_ruta_modelo_seleccionado(nombre_modelo):
             return ruta if os.path.exists(ruta) else None
     return None
     
-# === INTERFAZ PRINCIPAL ===
 st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
+
+# Manejo de scroll automático usando parámetros de URL
+params = st.experimental_get_query_params()
+scroll_to_form = params.get("formulario", [""])[0] == "1"
+
+if scroll_to_form:
+    st.markdown("<script>window.scrollTo(0, document.body.scrollHeight);</script>", unsafe_allow_html=True)
 
 st.markdown("""
 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
@@ -98,10 +105,12 @@ if categoria:
         for idx, img_nombre in enumerate(imagenes):
             ruta = os.path.join(ruta_carpeta, img_nombre)
             nombre_modelo = img_nombre.split('.')[0]
+            boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}"
             with cols[idx % 3]:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
-                if st.button(f"Seleccionar modelo: {nombre_modelo}", key=f"btn_{categoria}_{nombre_modelo}"):
+                if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                     st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
+                    st.experimental_set_query_params(formulario="1")
                     st.experimental_rerun()
 
     mostrar_catalogo(categoria, f"images/{categoria}")
