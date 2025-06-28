@@ -68,7 +68,7 @@ def obtener_ruta_modelo_seleccionado(nombre_modelo):
 st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 
 # Manejo de scroll automático usando parámetros de URL
-params = st.experimental_get_query_params()
+params = st.query_params
 scroll_to_form = params.get("formulario", [""])[0] == "1"
 
 if scroll_to_form:
