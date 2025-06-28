@@ -69,7 +69,7 @@ st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 
 # Manejo de scroll automático usando parámetros de URL
 params = st.query_params
-scroll_to_form = params.get("formulario", "") == "1"
+scroll_to_form = params.get("formulario") == "1"
 
 if scroll_to_form:
     st.markdown("<script>window.scrollTo(0, document.body.scrollHeight);</script>", unsafe_allow_html=True)
@@ -110,7 +110,7 @@ if categoria:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
                 if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                     st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                    st.set_query_params(formulario="1")
+                    st.query_params["formulario"] = "1"
                     st.rerun()
 
     mostrar_catalogo(categoria, f"images/{categoria}")
@@ -170,9 +170,9 @@ if st.session_state.modelo_seleccionado != "Ninguno":
         elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
             st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
         elif archivo_referencia is not None:
-            st.image(archivo_referencia, caption="Imagen subida", width=250)
-        else:
-            st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
+       else:
+              st.image(archivo_referencia, caption="Imagen subida", width=250)
+           st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
     except UnidentifiedImageError:
         st.error("⚠️ No se pudo cargar la imagen. Verifica que el archivo subido sea una imagen válida (JPG, PNG).")
 
