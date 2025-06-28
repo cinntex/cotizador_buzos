@@ -216,46 +216,32 @@ if st.session_state.modelo_seleccionado != "Ninguno":
     st.info("✅ Verifica todos los datos antes de continuar.")
 
 # === VALIDACIÓN Y GENERACIÓN DE PDF + BOTONES MEJORADOS ===
-    st.markdown("---")
-    if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
-        pdf_buffer = PDFCotizacion()
-        pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
-        ruta_pdf_local = guardar_pdf_local(pdf_buffer)
-        guardar_historial_excel(datos)
+st.markdown("---")
+if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
+    pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
+    ruta_pdf_local = guardar_pdf_local(pdf_buffer)
+    guardar_historial_excel(datos)
 
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-        with col1:
-            st.download_button(
-                label="📥 Descargar PDF",
-                data=pdf_buffer,
-                file_name="cotizacion_buzos.pdf",
-                mime="application/pdf"
-            )
+    with col1:
+        st.download_button(
+            label="📥 Descargar PDF",
+            data=pdf_buffer,
+            file_name="cotizacion_buzos.pdf",
+            mime="application/pdf"
+        )
 
-    # === WHATSAPP ===
-mensaje = f"""
-¡Hola! Deseo una cotización:
+    with col2:
+        mensaje_whatsapp = f"Hola, solicito cotización de buzos:\nModelo: {datos['Modelo']}\nTela: {datos['Tipo de tela']}\nTallas: {datos['Cantidad por tallas']}\nFecha deseada: {datos['Fecha deseada']}"
+        url_whatsapp = f"https://wa.me/51920076432?text={mensaje_whatsapp.replace(' ', '%20')}"
+        st.markdown(f"""
+            <a href="{url_whatsapp}" target="_blank">
+                <button style="background-color:#25D366; color:white; padding:8px 16px; border:none; border-radius:5px; font-size:16px; cursor:pointer;">
+                    📲 Enviar por WhatsApp
+                </button>
+            </a>
+        """, unsafe_allow_html=True)
 
-🧥 Tipo de tela: {tipo_tela}
-📦 Cantidades: {cantidad_total}
-📌 Modelo: {st.session_state.modelo_seleccionado}
-🎯 Bordado/Estampado: {', '.join(bordado)}
-📅 Fecha deseada: {fecha_entrega}
-{f'📝 Nota: {comentario_diseno}' if diseno_existente == "No, quiero que me ayuden" else ''}
-"""
-mensaje_url = mensaje.replace("\n", "%0A").replace(" ", "%20")
-numero = "920076432"
-url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
-
-st.markdown(
-    f"""
-    <a href="{url_whatsapp}" target="_blank" style="text-decoration: none;">
-        <button style="background-color: #25D366; color: white; padding: 10px 20px;
-                       border: none; border-radius: 5px; font-size: 16px;">
-            📲 Enviar por WhatsApp
-        </button>
-    </a>
-    """,
-    unsafe_allow_html=True
-)
+    # Mensaje con PDF local adjunto (requiere carga a nube en pasos siguientes)
+    st.info("🚀 Próximamente: opción para subir automáticamente el PDF a la nube y enviar enlace por WhatsApp.")
