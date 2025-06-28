@@ -69,7 +69,7 @@ st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 
 # Manejo de scroll automático usando parámetros de URL
 params = st.query_params
-scroll_to_form = params.get("formulario", [""])[0] == "1"
+scroll_to_form = params.get("formulario", "") == "1"
 
 if scroll_to_form:
     st.markdown("<script>window.scrollTo(0, document.body.scrollHeight);</script>", unsafe_allow_html=True)
@@ -105,13 +105,13 @@ if categoria:
         for idx, img_nombre in enumerate(imagenes):
             ruta = os.path.join(ruta_carpeta, img_nombre)
             nombre_modelo = img_nombre.split('.')[0]
-            boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}_{idx}"
+            boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}"
             with cols[idx % 3]:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
                 if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                     st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                    st.experimental_set_query_params(formulario="1")
-                    st.experimental_rerun()
+                    st.set_query_params(formulario="1")
+                    st.rerun()
 
     mostrar_catalogo(categoria, f"images/{categoria}")
 
