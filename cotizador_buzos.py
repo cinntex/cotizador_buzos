@@ -72,7 +72,8 @@ st.markdown("""
     <img src="https://mi-servidor.com/logo_cinntex.png" style="width: 120px;">
     <div>
         <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
-        <p style="maramos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
+        <p style="margin-top: 0; font-size: 16px; color: #ccc;">
+            Confeccionamos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
         </p>
     </div>
 </div>
@@ -82,8 +83,7 @@ st.title("🧥 Catálogo y Cotización de Buzos Personalizados")
 
 if "modelo_seleccionado" not in st.session_state:
     st.session_state.modelo_seleccionado = "Ninguno"
-gin-top: 0; font-size: 16px; color: #ccc;">
-            Confeccion
+
 archivo_referencia = None
 archivo_diseno = None
 comentario_diseno = ""
@@ -103,7 +103,7 @@ if categoria:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
                 if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                     st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                    st.success(f"Modelo '{nombre_modelo}' seleccionado.")
+                    st.experimental_rerun()
 
     mostrar_catalogo(categoria, f"images/{categoria}")
 
