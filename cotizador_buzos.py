@@ -88,7 +88,7 @@ def generar_pdf(datos, ruta_logo=None, ruta_disenio=None, ruta_modelo=None):
         pdf.ln(5)
     if ruta_disenio and os.path.exists(ruta_disenio):
         pdf.set_font("Arial", "B", 12)
-        pdf.cell(0, 10, "Imagen de referencia o dise\xf1o:", ln=True)
+        pdf.cell(0, 10, "Imagen de referencia o diseño:", ln=True)
         pdf.ln(2)
         pdf.image(ruta_disenio, w=90)
         pdf.ln(5)
@@ -216,21 +216,22 @@ if st.session_state.modelo_seleccionado != "Ninguno":
     st.info("✅ Verifica todos los datos antes de continuar.")
 
 # === VALIDACIÓN Y GENERACIÓN DE PDF + BOTONES MEJORADOS ===
-st.markdown("---")
-if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
-    pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
-    ruta_pdf_local = guardar_pdf_local(pdf_buffer)
-    guardar_historial_excel(datos)
+    st.markdown("---")
+    if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
+        pdf_buffer = PDFCotizacion()
+        pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
+        ruta_pdf_local = guardar_pdf_local(pdf_buffer)
+        guardar_historial_excel(datos)
 
-    col1, col2 = st.columns(2)
+        col1, col2 = st.columns(2)
 
-    with col1:
-        st.download_button(
-            label="📥 Descargar PDF",
-            data=pdf_buffer,
-            file_name="cotizacion_buzos.pdf",
-            mime="application/pdf"
-        )
+        with col1:
+            st.download_button(
+                label="📥 Descargar PDF",
+                data=pdf_buffer,
+                file_name="cotizacion_buzos.pdf",
+                mime="application/pdf"
+            )
 
     # === WHATSAPP ===
 mensaje = f"""
