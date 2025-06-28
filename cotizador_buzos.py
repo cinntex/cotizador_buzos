@@ -79,6 +79,20 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
+
+st.markdown("""
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+    <img src="https://mi-servidor.com/logo_cinntex.png" style="width: 120px;">
+    <div>
+        <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
+        <p style="margin-top: 0; font-size: 16px; color: #ccc;">
+            Confeccionamos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
+        </p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 st.title("🧥 Catálogo y Cotización de Buzos Personalizados")
 
 if "modelo_seleccionado" not in st.session_state:
@@ -103,11 +117,16 @@ if categoria:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
                 if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                     st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
+                    st.session_state.ir_a_formulario = True
                     st.rerun()
 
     mostrar_catalogo(categoria, f"images/{categoria}")
 
-if st.session_state.modelo_seleccionado != "Ninguno":
+if "ir_a_formulario" not in st.session_state:
+    st.session_state.ir_a_formulario = False
+
+if st.session_state.modelo_seleccionado != "Ninguno" and st.session_state.ir_a_formulario:
+    st.session_state.ir_a_formulario = False
     st.markdown("---")
     st.success(f"Modelo seleccionado: {st.session_state.modelo_seleccionado}")
 
