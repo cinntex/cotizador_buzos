@@ -3,9 +3,8 @@ from fpdf import FPDF
 from datetime import date
 import io
 import os
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from datetime import datetime
-from PIL import UnidentifiedImageError
 import pandas as pd
 
 # === CONFIGURACIÓN GENERAL ===
@@ -58,9 +57,11 @@ def guardar_pdf_local(pdf_bytes, nombre_base="cotizacion"):
 
 def obtener_ruta_modelo_seleccionado(nombre_modelo):
     if nombre_modelo.startswith("Buzos"):
-        categoria, nombre = nombre_modelo.split(" - ")
-        ruta = os.path.join("images", categoria, f"{nombre}.jpg")
-        return ruta if os.path.exists(ruta) else None
+        partes = nombre_modelo.split(" - ")
+        if len(partes) == 2:
+            categoria, nombre = partes
+            ruta = os.path.join("images", categoria, f"{nombre}.jpg")
+            return ruta if os.path.exists(ruta) else None
     return None
 
 # === CLASE PDF ===
@@ -100,148 +101,33 @@ def generar_pdf(datos, ruta_logo=None, ruta_disenio=None, ruta_modelo=None):
         pdf.ln(5)
     contenido = pdf.output(dest='S').encode('latin-1')
     return io.BytesIO(contenido)
-    
-# === INTERFAZ STREAMLIT ===
-st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
-
-st.markdown("""
-<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-    <img src="https://mi-servidor.com/logo_cinntex.png" style="width: 120px;">
-    <div>
-        <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
-        <p style="margin-top: 0; font-size: 16px; color: #ccc;">
-            Confeccionamos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
-        </p>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-st.title("🧥 Catálogo de modelos de buzos personalizados")
-
-if "modelo_seleccionado" not in st.session_state:
-    st.session_state.modelo_seleccionado = "Ninguno"
-
-archivo_referencia = None
-archivo_diseno = None
-comentario_diseno = ""
-
-categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
-
-if categoria:
-    def mostrar_catalogo(categoria, ruta_carpeta):
-        st.subheader(f"📸 Catálogo - {categoria}")
-        imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
-        cols = st.columns(3)
-        for idx, img_nombre in enumerate(imagenes):
-            ruta = os.path.join(ruta_carpeta, img_nombre)
-            nombre_modelo = img_nombre.split('.')[0]
-            with cols[idx % 3]:
-                st.image(ruta, caption=nombre_modelo, use_container_width=True)
-                if st.button(f"Seleccionar modelo: {nombre_modelo}", key=f"btn_{categoria}_{nombre_modelo}"):
-                    st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                    st.experimental_rerun()
-
-    mostrar_catalogo(categoria, f"images/{categoria}")
-
-if st.session_state.modelo_seleccionado != "Ninguno":
-    st.success(f"Modelo seleccionado: {st.session_state.modelo_seleccionado}")
-
-    st.markdown("---")
-    st.subheader("1. Selecciona el tipo de tela o material")
-    tipo_tela = st.selectbox("Tipo de tela disponible:", [
-        "Microwalon", "Microprince", "Microsatin", "Nova", "Gamberra", "Sport Licra", "Polinan", "Interfil"
-    ])
-
-    st.subheader("2. Cantidad por tallas")
-    cols_tallas = st.columns(5)
-    cantidades = {
-        "XS": cols_tallas[0].number_input("XS", min_value=0, step=1),
-        "S": cols_tallas[1].number_input("S", min_value=0, step=1),
-        "M": cols_tallas[2].number_input("M", min_value=0, step=1),
-        "L": cols_tallas[3].number_input("L", min_value=0, step=1),
-        "XL": cols_tallas[4].number_input("XL", min_value=0, step=1),
-    }
-    cantidad_total = sum(cantidades.values())
-    st.markdown(f"🧮 **Total de prendas:** {cantidad_total}")
-
-    bordado = st.multiselect("3. ¿Deseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantalón", "No deseo"])
-    archivo_logo = st.file_uploader("Sube tu logo o diseño", type=["jpg", "png", "pdf"])
-
-    diseno_existente = st.radio("4. ¿Tienes un diseño?", ["Sí, lo subiré", "No, quiero que me ayuden"])
-    if diseno_existente == "Sí, lo subiré":
-        archivo_diseno = st.file_uploader("Sube tu diseño o referencia", type=["jpg", "png", "pdf"])
-    else:
-        comentario_diseno = st.text_area("Describe lo que deseas que diseñemos:")
-
-    fecha_entrega = st.date_input("5. Fecha de entrega", min_value=date.today())
-
-    datos = {
-        "Tipo de tela": tipo_tela,
-        "Cantidad por tallas": str(cantidades),
-        "Modelo": st.session_state.modelo_seleccionado,
-        "Bordado/Estampado": ", ".join(bordado),
-        "Tiene diseño": diseno_existente,
-        "Comentario diseño": comentario_diseno if diseno_existente == "No, quiero que me ayuden" else "Archivo subido",
-        "Fecha deseada": fecha_entrega.strftime("%Y-%m-%d")
-    }
-
-    st.markdown("---")
-    st.subheader("📞 Vista previa del pedido")
-
-    ruta_logo_guardado = guardar_archivo_local(archivo_logo, tipo="logo")
-    ruta_disenio_guardado = guardar_archivo_local(archivo_diseno or archivo_referencia, tipo="diseno")
-    ruta_modelo_buzo = obtener_ruta_modelo_seleccionado(st.session_state.modelo_seleccionado)
-
-    try:
-        if ruta_modelo_buzo and os.path.exists(ruta_modelo_buzo):
-            st.image(ruta_modelo_buzo, caption="Modelo seleccionado", width=250)
-        elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
-            st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
-        elif archivo_referencia is not None:
-            st.image(archivo_referencia, caption="Imagen subida", width=250)
-        else:
-            st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
-    except UnidentifiedImageError:
-        st.error("⚠️ No se pudo cargar la imagen. Verifica que el archivo subido sea una imagen válida (JPG, PNG).")
-
-    st.write("### Detalles del pedido:")
-    for k, v in datos.items():
-        st.write(f"**{k}:** {v}")
-
-    if ruta_logo_guardado and os.path.exists(ruta_logo_guardado):
-        st.image(ruta_logo_guardado, caption="Logo subido", width=150)
-    if ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
-        st.image(ruta_disenio_guardado, caption="Diseño / Imagen de referencia", width=150)
-
-    st.info("✅ Verifica todos los datos antes de continuar.")
 
 # === VALIDACIÓN Y GENERACIÓN DE PDF + BOTONES MEJORADOS ===
-st.markdown("---")
-if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
-    pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
-    ruta_pdf_local = guardar_pdf_local(pdf_buffer)
-    guardar_historial_excel(datos)
+if 'cantidad_total' in locals() and 'ruta_modelo_buzo' in locals() and 'fecha_entrega' in locals():
+    if cantidad_total > 0 and ruta_modelo_buzo and fecha_entrega:
+        pdf_buffer = generar_pdf(datos, ruta_logo_guardado, ruta_disenio_guardado, ruta_modelo_buzo)
+        ruta_pdf_local = guardar_pdf_local(pdf_buffer)
+        guardar_historial_excel(datos)
 
-    col1, col2 = st.columns(2)
+        col1, col2 = st.columns(2)
 
-    with col1:
-        st.download_button(
-            label="📥 Descargar PDF",
-            data=pdf_buffer,
-            file_name="cotizacion_buzos.pdf",
-            mime="application/pdf"
-        )
+        with col1:
+            st.download_button(
+                label="📥 Descargar PDF",
+                data=pdf_buffer,
+                file_name="cotizacion_buzos.pdf",
+                mime="application/pdf"
+            )
 
-    with col2:
-        mensaje_whatsapp = f"Hola, solicito cotización de buzos:\nModelo: {datos['Modelo']}\nTela: {datos['Tipo de tela']}\nTallas: {datos['Cantidad por tallas']}\nFecha deseada: {datos['Fecha deseada']}"
-        url_whatsapp = f"https://wa.me/51920076432?text={mensaje_whatsapp.replace(' ', '%20')}"
-        st.markdown(f"""
-            <a href="{url_whatsapp}" target="_blank">
-                <button style="background-color:#25D366; color:white; padding:8px 16px; border:none; border-radius:5px; font-size:16px; cursor:pointer;">
-                    📲 Enviar por WhatsApp
-                </button>
-            </a>
-        """, unsafe_allow_html=True)
+        with col2:
+            mensaje_whatsapp = f"Hola, solicito cotización de buzos:\nModelo: {datos['Modelo']}\nTela: {datos['Tipo de tela']}\nTallas: {datos['Cantidad por tallas']}\nFecha deseada: {datos['Fecha deseada']}"
+            url_whatsapp = f"https://wa.me/51920076432?text={mensaje_whatsapp.replace(' ', '%20')}"
+            st.markdown(f"""
+                <a href="{url_whatsapp}" target="_blank">
+                    <button style="background-color:#25D366; color:white; padding:8px 16px; border:none; border-radius:5px; font-size:16px; cursor:pointer;">
+                        📲 Enviar por WhatsApp
+                    </button>
+                </a>
+            """, unsafe_allow_html=True)
 
-    # Mensaje con PDF local adjunto (requiere carga a nube en pasos siguientes)
-    st.info("🚀 Próximamente: opción para subir automáticamente el PDF a la nube y enviar enlace por WhatsApp.")
+        st.info("🚀 Próximamente: opción para subir automáticamente el PDF a la nube y enviar enlace por WhatsApp.")
