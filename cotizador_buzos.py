@@ -122,6 +122,11 @@ Trabajamos prendas personalizadas con acabados profesionales.
 Por favor, completa este formulario para brindarte una **cotizaci\xf3n exacta**:
 """)
 
+# Menú principal
+secciones = ["🏠 Inicio", "🧥 Catálogo de modelos", "🧾 Cotización"]
+seccion = st.sidebar.radio("Navegación", secciones)
+
+if seccion == "🧥 Catálogo de modelos":
 # CATÁLOGO VISUAL
 if "modelo_seleccionado" not in st.session_state:
     st.session_state.modelo_seleccionado = "Ninguno"
