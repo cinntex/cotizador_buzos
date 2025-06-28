@@ -106,7 +106,7 @@ st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 
 # Inicializar claves del estado de sesión
 if "modelo_seleccionado" not in st.session_state:
-    st.session_state.modelo_seleccionado = "Ninguno"}
+    st.session_state.modelo_seleccionado = "Ninguno"
     
 st.markdown("""
 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
