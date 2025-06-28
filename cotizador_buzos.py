@@ -127,12 +127,12 @@ secciones = ["🏠 Inicio", "🧥 Catálogo de modelos", "🧾 Cotización"]
 seccion = st.sidebar.radio("Navegación", secciones)
 
 if seccion == "🧥 Catálogo de modelos":
-    # === CATÁLOGO VISUAL ===
-if "modelo_seleccionado" not in st.session_state:
-    st.session_state.modelo_seleccionado = "Ninguno"
-
+    # CATÁLOGO VISUAL
+    if "modelo_seleccionado" not in st.session_state:
+        st.session_state.modelo_seleccionado = "Ninguno"
+        
     st.markdown("📂 Ver catálogo visual de modelos")
-
+    
     def mostrar_catalogo(categoria, ruta_carpeta):
         st.subheader(f"📸 Catálogo - {categoria}")
         imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
