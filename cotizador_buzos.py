@@ -170,9 +170,9 @@ if st.session_state.modelo_seleccionado != "Ninguno":
         elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
             st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
         elif archivo_referencia is not None:
-       else:
-              st.image(archivo_referencia, caption="Imagen subida", width=250)
-           st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
+            st.image(archivo_referencia, caption="Imagen subida", width=250)
+        else:
+            st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
     except UnidentifiedImageError:
         st.error("⚠️ No se pudo cargar la imagen. Verifica que el archivo subido sea una imagen válida (JPG, PNG).")
 
