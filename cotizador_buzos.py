@@ -192,6 +192,8 @@ fecha_entrega = st.date_input("5. Fecha de entrega", min_value=date.today())
 datos = {
     "Tipo de tela": tipo_tela,
     "Cantidad por tallas": str(cantidades),
+if "modelo_seleccionado" not in st.session_state:
+    st.session_state.modelo_seleccionado = "Ninguno"
     "Modelo": st.session_state.modelo_seleccionado,
     "Bordado/Estampado": ", ".join(bordado),
     "Tiene dise\xf1o": diseno_existente,
