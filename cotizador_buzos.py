@@ -103,7 +103,7 @@ if categoria:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
                 if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                     st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                    st.experimental_rerun()
+                    st.rerun()
 
     mostrar_catalogo(categoria, f"images/{categoria}")
 
