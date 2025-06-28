@@ -105,7 +105,7 @@ if categoria:
         for idx, img_nombre in enumerate(imagenes):
             ruta = os.path.join(ruta_carpeta, img_nombre)
             nombre_modelo = img_nombre.split('.')[0]
-            boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}"
+            boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}_{idx}"
             with cols[idx % 3]:
                 st.image(ruta, caption=nombre_modelo, use_container_width=True)
                 if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
