@@ -79,7 +79,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.title("🧥 Catálogo y Cotización de Buzos Personalizados")
+st.title("🧥 Catálogo de modelos de buzos personalizados")
 
 if "modelo_seleccionado" not in st.session_state:
     st.session_state.modelo_seleccionado = "Ninguno"
@@ -88,103 +88,103 @@ archivo_referencia = None
 archivo_diseno = None
 comentario_diseno = ""
 
-categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
+# === SISTEMA DE TABS ===
+tab1, tab2 = st.tabs(["📸 Catálogo", "📝 Formulario"])
 
-if categoria:
-    def mostrar_catalogo(categoria, ruta_carpeta):
-        st.subheader(f"📸 Catálogo - {categoria}")
-        imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
-        cols = st.columns(3)
-        for idx, img_nombre in enumerate(imagenes):
-            ruta = os.path.join(ruta_carpeta, img_nombre)
-            nombre_modelo = img_nombre.split('.')[0]
-            boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}_{idx}"
-            with cols[idx % 3]:
-                st.image(ruta, caption=nombre_modelo, use_container_width=True)
-                if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
-                    st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                    st.session_state.ir_a_formulario = True
-                    st.rerun()
+with tab1:
+    categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
 
-    mostrar_catalogo(categoria, f"images/{categoria}")
+    if categoria:
+        def mostrar_catalogo(categoria, ruta_carpeta):
+            st.subheader(f"📸 Catálogo - {categoria}")
+            imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
+            cols = st.columns(3)
+            for idx, img_nombre in enumerate(imagenes):
+                ruta = os.path.join(ruta_carpeta, img_nombre)
+                nombre_modelo = img_nombre.split('.')[0]
+                boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}_{idx}"
+                with cols[idx % 3]:
+                    st.image(ruta, caption=nombre_modelo, use_container_width=True)
+                    if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
+                        st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
+                        st.success(f"Modelo '{nombre_modelo}' seleccionado. Ve a la pestaña de formulario para continuar.")
 
-if "ir_a_formulario" not in st.session_state:
-    st.session_state.ir_a_formulario = False
+        mostrar_catalogo(categoria, f"images/{categoria}")
 
-if st.session_state.modelo_seleccionado != "Ninguno" and st.session_state.ir_a_formulario:
-    st.session_state.ir_a_formulario = False
-    st.markdown("---")
-    st.success(f"Modelo seleccionado: {st.session_state.modelo_seleccionado}")
+with tab2:
+    if st.session_state.modelo_seleccionado != "Ninguno":
+        st.success(f"Modelo seleccionado: {st.session_state.modelo_seleccionado}")
 
-    st.subheader("1. Selecciona el tipo de tela o material")
-    tipo_tela = st.selectbox("Tipo de tela disponible:", [
-        "Microwalon", "Microprince", "Microsatin", "Nova", "Gamberra", "Sport Licra", "Polinan", "Interfil"
-    ])
+        st.markdown("---")
+        st.subheader("1. Selecciona el tipo de tela o material")
+        tipo_tela = st.selectbox("Tipo de tela disponible:", [
+            "Microwalon", "Microprince", "Microsatin", "Nova", "Gamberra", "Sport Licra", "Polinan", "Interfil"
+        ])
 
-    st.subheader("2. Cantidad por tallas")
-    cols_tallas = st.columns(5)
-    cantidades = {
-        "XS": cols_tallas[0].number_input("XS", min_value=0, step=1),
-        "S": cols_tallas[1].number_input("S", min_value=0, step=1),
-        "M": cols_tallas[2].number_input("M", min_value=0, step=1),
-        "L": cols_tallas[3].number_input("L", min_value=0, step=1),
-        "XL": cols_tallas[4].number_input("XL", min_value=0, step=1),
-    }
-    cantidad_total = sum(cantidades.values())
-    st.markdown(f"🧮 **Total de prendas:** {cantidad_total}")
+        st.subheader("2. Cantidad por tallas")
+        cols_tallas = st.columns(5)
+        cantidades = {
+            "XS": cols_tallas[0].number_input("XS", min_value=0, step=1),
+            "S": cols_tallas[1].number_input("S", min_value=0, step=1),
+            "M": cols_tallas[2].number_input("M", min_value=0, step=1),
+            "L": cols_tallas[3].number_input("L", min_value=0, step=1),
+            "XL": cols_tallas[4].number_input("XL", min_value=0, step=1),
+        }
+        cantidad_total = sum(cantidades.values())
+        st.markdown(f"🧮 **Total de prendas:** {cantidad_total}")
 
-    bordado = st.multiselect("3. ¿Deseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantalón", "No deseo"])
-    archivo_logo = st.file_uploader("Sube tu logo o diseño", type=["jpg", "png", "pdf"])
+        bordado = st.multiselect("3. ¿Deseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantalón", "No deseo"])
+        archivo_logo = st.file_uploader("Sube tu logo o diseño", type=["jpg", "png", "pdf"])
 
-    diseno_existente = st.radio("4. ¿Tienes un diseño?", ["Sí, lo subiré", "No, quiero que me ayuden"])
-    if diseno_existente == "Sí, lo subiré":
-        archivo_diseno = st.file_uploader("Sube tu diseño o referencia", type=["jpg", "png", "pdf"])
-    else:
-        comentario_diseno = st.text_area("Describe lo que deseas que diseñemos:")
-
-    fecha_entrega = st.date_input("5. Fecha de entrega", min_value=date.today())
-
-    datos = {
-        "Tipo de tela": tipo_tela,
-        "Cantidad por tallas": str(cantidades),
-        "Modelo": st.session_state.modelo_seleccionado,
-        "Bordado/Estampado": ", ".join(bordado),
-        "Tiene diseño": diseno_existente,
-        "Comentario diseño": comentario_diseno if diseno_existente == "No, quiero que me ayuden" else "Archivo subido",
-        "Fecha deseada": fecha_entrega.strftime("%Y-%m-%d")
-    }
-
-    st.markdown("---")
-    st.subheader("📞 Vista previa del pedido")
-
-    ruta_logo_guardado = guardar_archivo_local(archivo_logo, tipo="logo")
-    ruta_disenio_guardado = guardar_archivo_local(archivo_diseno or archivo_referencia, tipo="diseno")
-    ruta_modelo_buzo = obtener_ruta_modelo_seleccionado(st.session_state.modelo_seleccionado)
-
-    try:
-        if ruta_modelo_buzo and os.path.exists(ruta_modelo_buzo):
-            st.image(ruta_modelo_buzo, caption="Modelo seleccionado", width=250)
-        elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
-            st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
-        elif archivo_referencia is not None:
-            st.image(archivo_referencia, caption="Imagen subida", width=250)
+        diseno_existente = st.radio("4. ¿Tienes un diseño?", ["Sí, lo subiré", "No, quiero que me ayuden"])
+        if diseno_existente == "Sí, lo subiré":
+            archivo_diseno = st.file_uploader("Sube tu diseño o referencia", type=["jpg", "png", "pdf"])
         else:
-            st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
-    except UnidentifiedImageError:
-        st.error("⚠️ No se pudo cargar la imagen. Verifica que el archivo subido sea una imagen válida (JPG, PNG).")
+            comentario_diseno = st.text_area("Describe lo que deseas que diseñemos:")
 
-    st.write("### Detalles del pedido:")
-    for k, v in datos.items():
-        st.write(f"**{k}:** {v}")
+        fecha_entrega = st.date_input("5. Fecha de entrega", min_value=date.today())
 
-    if ruta_logo_guardado and os.path.exists(ruta_logo_guardado):
-        st.image(ruta_logo_guardado, caption="Logo subido", width=150)
-    if ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
-        st.image(ruta_disenio_guardado, caption="Diseño / Imagen de referencia", width=150)
+        datos = {
+            "Tipo de tela": tipo_tela,
+            "Cantidad por tallas": str(cantidades),
+            "Modelo": st.session_state.modelo_seleccionado,
+            "Bordado/Estampado": ", ".join(bordado),
+            "Tiene diseño": diseno_existente,
+            "Comentario diseño": comentario_diseno if diseno_existente == "No, quiero que me ayuden" else "Archivo subido",
+            "Fecha deseada": fecha_entrega.strftime("%Y-%m-%d")
+        }
 
-    st.info("✅ Verifica todos los datos antes de continuar.")
-else:
-    st.info("Primero selecciona una categoría y modelo para cotizar.")
+        st.markdown("---")
+        st.subheader("📞 Vista previa del pedido")
+
+        ruta_logo_guardado = guardar_archivo_local(archivo_logo, tipo="logo")
+        ruta_disenio_guardado = guardar_archivo_local(archivo_diseno or archivo_referencia, tipo="diseno")
+        ruta_modelo_buzo = obtener_ruta_modelo_seleccionado(st.session_state.modelo_seleccionado)
+
+        try:
+            if ruta_modelo_buzo and os.path.exists(ruta_modelo_buzo):
+                st.image(ruta_modelo_buzo, caption="Modelo seleccionado", width=250)
+            elif ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
+                st.image(ruta_disenio_guardado, caption="Imagen de referencia", width=250)
+            elif archivo_referencia is not None:
+                st.image(archivo_referencia, caption="Imagen subida", width=250)
+            else:
+                st.warning("No se ha seleccionado ningún modelo ni imagen de referencia.")
+        except UnidentifiedImageError:
+            st.error("⚠️ No se pudo cargar la imagen. Verifica que el archivo subido sea una imagen válida (JPG, PNG).")
+
+        st.write("### Detalles del pedido:")
+        for k, v in datos.items():
+            st.write(f"**{k}:** {v}")
+
+        if ruta_logo_guardado and os.path.exists(ruta_logo_guardado):
+            st.image(ruta_logo_guardado, caption="Logo subido", width=150)
+        if ruta_disenio_guardado and os.path.exists(ruta_disenio_guardado):
+            st.image(ruta_disenio_guardado, caption="Diseño / Imagen de referencia", width=150)
+
+        st.info("✅ Verifica todos los datos antes de continuar.")
+    else:
+        st.warning("Selecciona un modelo desde la pestaña de catálogo para continuar con el formulario.")
 
 # === CLASE PDF ===
 class PDFCotizacion(FPDF):
