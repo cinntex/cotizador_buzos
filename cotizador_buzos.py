@@ -147,7 +147,7 @@ st.markdown(f"🧶 **Total de prendas:** {cantidad_total}")
 bordado = st.multiselect("3. ¿Deseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantalón", "No deseo"])
 archivo_logo = st.file_uploader("Sube tu logo o diseño", type=["jpg", "png", "pdf"])
 
-fecha_entrega = st.date_input("4. Fecha de entrega", min_value=date.today())
+fecha_entrega = st.date_input("4. ¿Para que fecha desea la entrega?", min_value=date.today())
 
 datos = {
     "Tipo de tela": tipo_tela,
