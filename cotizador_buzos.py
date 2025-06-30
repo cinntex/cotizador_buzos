@@ -94,32 +94,28 @@ mostrar_catalogo = st.toggle("📂 Mostrar catálogo de modelos")
 if mostrar_catalogo:
     categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
 
-    if categoria:
-        def mostrar_catalogo(categoria, ruta_carpeta):
-            st.subheader(f"📸 Catálogo - {categoria}")
-            imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
-            cols = st.columns(3)
-            for idx, img_nombre in enumerate(imagenes):
-                ruta = os.path.join(ruta_carpeta, img_nombre)
-                nombre_modelo = img_nombre.split('.')[0]
-                boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}_{idx}"
-                with cols[idx % 3]:
-                    st.image(ruta, caption=nombre_modelo, use_container_width=True)
-                    if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
-                       st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                       st.query_params.update({"formulario": "1"})
-                       components.html("""
-                           <script>
-                            setTimeout(function() {
-                                const formSection = document.querySelector('section.main');
-                                if (formSection) {
-                                    formSection.scrollIntoView({ behavior: 'smooth' });
-                                } else {
-                                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                                }
-                            }, 300);
-                        </script>
-                    """, height=0)
+if categoria:
+def mostrar_catalogo(categoria, ruta_carpeta):
+    st.subheader(f"📸 Catálogo - {categoria}")
+    imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
+    cols = st.columns(3)
+    for idx, img_nombre in enumerate(imagenes):
+        ruta = os.path.join(ruta_carpeta, img_nombre)
+        nombre_modelo = img_nombre.split('.')[0]
+        boton_key = f"btn_{categoria.replace(' ', '_')}_{nombre_modelo}_{idx}"
+        with cols[idx % 3]:
+            st.image(ruta, caption=nombre_modelo, use_container_width=True)
+            if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
+                st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
+                st.query_params.update({"formulario": "1"})
+                components.html("""
+                <script>
+                setTimeout(function() {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }, 300);
+                </script>
+                """, height=0)
+
 
         mostrar_catalogo(categoria, f"images/{categoria}")
 
