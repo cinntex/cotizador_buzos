@@ -69,7 +69,7 @@ st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
 
 st.markdown("""
 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-    <img src="https://mi-servidor.com/logo.png" style="width: 120px;">
+    <img src="https://cotizador_buzos.com/logo.png" style="width: 120px;">
     <div>
         <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
         <p style="margin-top: 0; font-size: 16px; color: #ccc;">
