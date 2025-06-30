@@ -85,6 +85,9 @@ st.title("🫅 Catálogo y Cotización de Buzos Personalizados")
 if "modelo_seleccionado" not in st.session_state:
     st.session_state.modelo_seleccionado = "Ninguno"
 
+if "mostrar_catalogo" not in st.session_state:
+    st.session_state.mostrar_catalogo = True
+
 archivo_referencia = None
 archivo_diseno = None
 comentario_diseno = ""
@@ -102,12 +105,10 @@ def mostrar_catalogo_func(categoria, ruta_carpeta):
             st.image(ruta, caption=nombre_modelo, use_container_width=True)
             if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                 st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                st.experimental_rerun()
+                st.session_state.mostrar_catalogo = False
 
 # Mostrar catálogo con interruptor (toggle)
-mostrar_catalogo = st.toggle("📂 Mostrar catálogo de modelos")
-
-if mostrar_catalogo:
+if st.toggle("📂 Mostrar catálogo de modelos", value=st.session_state.mostrar_catalogo, key="toggle_catalogo"):
     categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
     if categoria:
         mostrar_catalogo_func(categoria, f"images/{categoria}")
