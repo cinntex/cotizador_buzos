@@ -7,6 +7,7 @@ from PIL import Image, UnidentifiedImageError
 from PIL import UnidentifiedImageError
 from datetime import datetime
 import pandas as pd
+import streamlit.components.v1 as components
 
 # === CONFIGURACIÓN GENERAL ===
 CARPETA_UPLOADS = "uploads"
@@ -79,7 +80,21 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.title("🧥 Catálogo y Cotización de Buzos Personalizados")
+st.set_page_config(page_title="Cotizador Buzos Deportivos", layout="wide")
+
+st.markdown("""
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+    <img src="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/logo.png" style="width: 120px;">
+    <div>
+        <h2 style="margin-bottom: 5px;">SportWear Pro</h2>
+        <p style="margin-top: 0; font-size: 16px; color: #ccc;">
+            Confeccionamos prendas personalizadas de alta calidad para <strong>empresas, colegios y equipos deportivos</strong>.
+        </p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+st.title("🫅 Catálogo y Cotización de Buzos Personalizados")
 
 if "modelo_seleccionado" not in st.session_state:
     st.session_state.modelo_seleccionado = "Ninguno"
@@ -88,14 +103,8 @@ archivo_referencia = None
 archivo_diseno = None
 comentario_diseno = ""
 
-# Mostrar catálogo con interruptor (toggle)
-mostrar_catalogo = st.toggle("📂 Mostrar catálogo de modelos")
-
-if mostrar_catalogo:
-    categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
-
-if categoria:
-def mostrar_catalogo(categoria, ruta_carpeta):
+# === FUNCIÓN PARA MOSTRAR CATÁLOGO ===
+def mostrar_catalogo_func(categoria, ruta_carpeta):
     st.subheader(f"📸 Catálogo - {categoria}")
     imagenes = sorted([img for img in os.listdir(ruta_carpeta) if img.endswith(('.jpg', '.png'))])
     cols = st.columns(3)
@@ -107,17 +116,15 @@ def mostrar_catalogo(categoria, ruta_carpeta):
             st.image(ruta, caption=nombre_modelo, use_container_width=True)
             if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                 st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                st.query_params.update({"formulario": "1"})
-                components.html("""
-                <script>
-                setTimeout(function() {
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                }, 300);
-                </script>
-                """, height=0)
+                st.experimental_rerun()
 
+# Mostrar catálogo con interruptor (toggle)
+mostrar_catalogo = st.toggle("📂 Mostrar catálogo de modelos")
 
-        mostrar_catalogo(categoria, f"images/{categoria}")
+if mostrar_catalogo:
+    categoria = st.selectbox("Selecciona la categoría de buzos", ["", "Buzos Deportivos", "Buzos Escolares"])
+    if categoria:
+        mostrar_catalogo_func(categoria, f"images/{categoria}")
 
 if st.session_state.modelo_seleccionado != "Ninguno":
     st.markdown("---")
@@ -148,7 +155,7 @@ cantidades = {
     "XL": cols_tallas[4].number_input("XL", min_value=0, step=1),
 }
 cantidad_total = sum(cantidades.values())
-st.markdown(f"🧮 **Total de prendas:** {cantidad_total}")
+st.markdown(f"🧶 **Total de prendas:** {cantidad_total}")
 
 bordado = st.multiselect("3. ¿Deseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantalón", "No deseo"])
 archivo_logo = st.file_uploader("Sube tu logo o diseño", type=["jpg", "png", "pdf"])
