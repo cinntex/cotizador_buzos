@@ -106,20 +106,20 @@ if mostrar_catalogo:
                 with cols[idx % 3]:
                     st.image(ruta, caption=nombre_modelo, use_container_width=True)
                     if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
-    st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-    st.query_params.update({"formulario": "1"})
-    components.html("""
-        <script>
-            setTimeout(function() {
-                const formSection = document.querySelector('section.main');
-                if (formSection) {
-                    formSection.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                }
-            }, 300);
-        </script>
-    """, height=0)
+                       st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
+                       st.query_params.update({"formulario": "1"})
+                       components.html("""
+                           <script>
+                            setTimeout(function() {
+                                const formSection = document.querySelector('section.main');
+                                if (formSection) {
+                                    formSection.scrollIntoView({ behavior: 'smooth' });
+                                } else {
+                                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                                }
+                            }, 300);
+                        </script>
+                    """, height=0)
 
         mostrar_catalogo(categoria, f"images/{categoria}")
 
