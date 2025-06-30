@@ -107,8 +107,14 @@ if mostrar_catalogo:
                     st.image(ruta, caption=nombre_modelo, use_container_width=True)
                     if st.button(f"Seleccionar modelo: {nombre_modelo}", key=boton_key):
                         st.session_state.modelo_seleccionado = f"{categoria} - {nombre_modelo}"
-                        st.experimental_set_query_params(modelo=nombre_modelo)
-                        st.rerun()
+                        st.experimental_set_query_params(formulario="1")
+                        components.html("""
+                        <script>
+                        setTimeout(function() {
+                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                        }, 300);
+                        </script>
+                        """, height=0)
 
         mostrar_catalogo(categoria, f"images/{categoria}")
 
@@ -117,6 +123,14 @@ if st.session_state.modelo_seleccionado != "Ninguno":
     st.success(f"Modelo seleccionado: {st.session_state.modelo_seleccionado}")
 else:
     st.info("Si no encuentras un modelo que se ajuste a tu necesidad, sube tu propio diseño.")
+
+# Opcional: subir imagen si no hay modelo
+st.subheader("¿Tienes un diseño personalizado?")
+diseno_existente = st.radio("Selecciona una opción:", ["Sí, lo subiré", "No, quiero que me ayuden"])
+if diseno_existente == "Sí, lo subiré":
+    archivo_diseno = st.file_uploader("Sube tu diseño o referencia", type=["jpg", "png", "pdf"])
+else:
+    comentario_diseno = st.text_area("Describe lo que deseas que diseñemos:")
 
 st.subheader("1. Selecciona el tipo de tela o material")
 tipo_tela = st.selectbox("Tipo de tela disponible:", [
@@ -138,13 +152,7 @@ st.markdown(f"🧮 **Total de prendas:** {cantidad_total}")
 bordado = st.multiselect("3. ¿Deseas bordado o estampado?", ["Pecho Derecho", "Pecho Izquierdo", "Espalda", "Pantalón", "No deseo"])
 archivo_logo = st.file_uploader("Sube tu logo o diseño", type=["jpg", "png", "pdf"])
 
-diseno_existente = st.radio("4. ¿Tienes un diseño?", ["Sí, lo subiré", "No, quiero que me ayuden"])
-if diseno_existente == "Sí, lo subiré":
-    archivo_diseno = st.file_uploader("Sube tu diseño o referencia", type=["jpg", "png", "pdf"])
-else:
-    comentario_diseno = st.text_area("Describe lo que deseas que diseñemos:")
-
-fecha_entrega = st.date_input("5. Fecha de entrega", min_value=date.today())
+fecha_entrega = st.date_input("4. Fecha de entrega", min_value=date.today())
 
 datos = {
     "Tipo de tela": tipo_tela,
